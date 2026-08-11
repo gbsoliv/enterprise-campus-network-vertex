@@ -1,7 +1,0 @@
-Implement network segmentation using VLANs.
-
-VLAN Creation
-Access Ports
-Trunk Ports
-Native VLAN
-Voice VLAN
