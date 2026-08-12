@@ -1,138 +1,70 @@
-\# Case 02 — VLAN Segmentation
+# Case 02 — VLAN Segmentation
 
+## Problem
 
+The flat Layer 2 network does not provide isolation between departments.
 
-\## Problem:
+## Solution
 
+The network was segmented using IEEE 802.1Q VLANs to separate departments and infrastructure services.
 
+### Implementation
 
-The flat Layer 2 network don't provide isolation between departments.
+- Access Ports
+- 802.1Q Trunks
+- Native VLAN
+- Voice VLAN
+- VTP
 
+## VLAN Design
 
+VLAN 10  EXECUTIVE  
+VLAN 20  SALES  
+VLAN 30  MARKETING  
+VLAN 40  HR  
+VLAN 50  OPERATIONS  
+VLAN 60  ACCOUNTING  
+VLAN 70  SERVERS  
+VLAN 80  PRINTERS  
+VLAN 90  WIRELESS  
+VLAN 99  MANAGEMENT  
+VLAN 100 VOICE  
+VLAN 999 NATIVE  
 
-\## Solution:
+## Access Layer
 
+Access ports were assigned to their corresponding departmental VLANs.
 
+IP phone interfaces use VLAN 100 for voice traffic while maintaining the appropriate data VLAN for connected workstations.
 
-To improve security, the network will be segmented using IEEE 802.1Q VLANs.
+VLAN 99 is reserved for network management.
 
+## Trunking
 
+802.1Q trunks were configured between the Access, Distribution, and Core layers.
 
-\### Implementation
+VLAN 999 is used as the native VLAN.
 
+Only required VLANs are allowed across each trunk.
 
+## VTP
 
-* VLAN Creation
-* Access Ports
-* Trunk Ports
-* Native VLAN
-* Voice VLAN
+VTPv2 is used between the Core and Distribution layers for centralized VLAN management.
 
+CORE-01 → VTP Server  
+CORE-02 → VTP Client  
+DIST-01 → VTP Client  
+DIST-02 → VTP Client  
 
+Domain: VERTEX  
+Version: 2
 
-\## VLAN Design
+The Access layer is configured manually and does not rely on VTP.
 
+## Verification
 
-
-&#x20;VLAN 10   EXECUTIVE
-
-&#x20;VLAN 20   SALES
-
-&#x20;VLAN 30   MARKETING
-
-&#x20;VLAN 40   HR
-
-&#x20;VLAN 50   OPERATIONS
-
-&#x20;VLAN 60   ACCOUNTING
-
-&#x20;VLAN 70   SERVERS
-
-&#x20;VLAN 80   PRINTERS
-
-&#x20;VLAN 90   WIRELESS
-
-&#x20;VLAN 99   MANAGEMENT
-
-&#x20;VLAN 100  VOICE
-
-&#x20;VLAN 999  NATIVE
-
-
-
-
-
-\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*
-
-
-
-\### ACC-01
-
-
-
-VLAN 99  MANAGEMENT
-
-Fa0/1 ───── VLAN 10  EXECUTIVE
-
-Fa1/1 ───── VLAN 10  EXECUTIVE + VLAN 100 VOICE
-
-Fa2/1 ───── VLAN 20  SALES + VLAN 100 VOICE
-
-Fa3/1 ───── VLAN 20  SALES      
-
-Fa6/1 ───── TRUNK                      
-
-
-
-\### ACC-02
-
-
-
-VLAN 99  MANAGEMENT
-
-Fa0/1 ───── VLAN 30  MARKETING
-
-Fa0/2 ───── VLAN 30  MARKETING
-
-Fa0/3 ───── VLAN 40  HR
-
-Fa6/1 ───── TRUNK
-
-
-
-\### ACC-03
-
-
-
-VLAN 99  MANAGEMENT
-
-Fa0/1 ───── VLAN 50  OPERATIONS + VLAN 100 VOICE
-
-Fa0/2 ───── VLAN 60  ACCOUNTING
-
-VLAN 99  MANAGEMENT
-
-Fa6/1 ───── TRUNK
-
-
-
-\### ACC-04
-
-
-
-VLAN 99  MANAGEMENT
-
-Fa0/1 ───── VLAN 80  PRINTERS
-
-Fa0/2 ───── VLAN 80  PRINTERS
-
-Fa0/3 ───── VLAN 90  WIRELESS
-
-Fa0/4 ───── VLAN 70  SERVERS
-
-Fa0/5 ───── VLAN 70  SERVERS
-
-Fa6/1 ───── TRUNK
-
-
+`show vlan brief`  
+`show interfaces trunk`  
+`show interfaces switchport`  
+`show vtp status`
 
