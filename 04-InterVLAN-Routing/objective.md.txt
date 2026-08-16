@@ -1,7 +1,0 @@
-Enable communication between VLANs.
-
-Topics
-
-Router-on-a-Stick
-Layer 3 Switch SVIs
-Default Gateway
