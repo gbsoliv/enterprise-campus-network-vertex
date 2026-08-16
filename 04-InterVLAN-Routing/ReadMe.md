@@ -21,8 +21,6 @@ Implement Inter-VLAN Routing using Layer 3 switching and provide gateway redunda
 
 CORE-01 and CORE-02 provide Layer 3 connectivity for each VLAN.
 
-Each Core has a unique SVI address:
-
 ```text
               CORE-01       CORE-02
 
@@ -39,11 +37,14 @@ VLAN 99       10.10.99.2    10.10.99.3
 VLAN 100      10.10.100.2   10.10.100.3
 ```
 
-## HSRP Virtual Gateways
+## HSRP
 
 HSRP provides a redundant default gateway for each VLAN.
 
-The `.1` address is reserved as the virtual gateway used by end devices.
+CORE-01 → Active
+CORE-02 → Standby
+
+The `.1` address of each subnet is used as the virtual default gateway.
 
 ```text
 VLAN 10       10.10.10.1
@@ -67,3 +68,16 @@ VLAN 100      10.10.100.1
 .3 → CORE-02 SVI
 ```
 
+## Failover
+
+Gateway failover was tested by disabling the active SVI on CORE-01.
+
+CORE-02 successfully transitioned from Standby to Active while maintaining connectivity through the virtual gateway.
+
+## Verification
+
+```cisco
+show ip interface brief
+show ip route
+show standby brief
+```
