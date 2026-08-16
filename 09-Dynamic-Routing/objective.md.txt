@@ -1,3 +1,0 @@
-OSPF
-Multi-area (future)
-Route Summarization

@@ -1,3 +1,0 @@
-Static Route
-Default Route
-NAT/PAT

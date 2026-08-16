@@ -1,4 +1,0 @@
-Dual Stack
-SLAAC
-DHCPv6
-OSPFv3

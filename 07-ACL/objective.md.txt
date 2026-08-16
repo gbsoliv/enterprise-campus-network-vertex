@@ -1,5 +1,0 @@
-Business requirement:
-
-Accounting should not access Marketing resources.
-
-Guest users should only access the Internet.
