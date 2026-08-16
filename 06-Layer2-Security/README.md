@@ -1,13 +1,12 @@
-
 # Case 06 — Layer 2 Security
 
 ## Problem
 
-Layer 2 networks are vulnerable to unauthorized access, rogue devices, DHCP attacks, ARP spoofing, and switching attacks.
+Access-layer switches are directly exposed to end devices, creating potential Layer 2 security risks and unauthorized network access.
 
 ## Solution
 
-Implement Layer 2 security controls to protect access ports and validate traffic within the campus network.
+Implement basic Layer 2 security controls to protect access ports and DHCP traffic.
 
 ### Implementation
 
@@ -15,8 +14,6 @@ Implement Layer 2 security controls to protect access ports and validate traffic
 * Port Security
 * PortFast + BPDU Guard
 * DHCP Snooping
-* Dynamic ARP Inspection (DAI)
-* IP Source Guard
 
 ## Unused Ports
 
@@ -29,17 +26,22 @@ interface range <unused-ports>
 
 ## Port Security
 
-Port Security restricts access ports based on allowed MAC addresses and limits unauthorized devices.
+Port Security was configured on access ports using sticky MAC learning.
+
+Single-device ports allow one MAC address, while ports shared by an IP Phone and PC allow two.
 
 ```cisco
 switchport port-security
+switchport port-security maximum <1-2>
+switchport port-security mac-address sticky
+switchport port-security violation shutdown
 ```
 
-## BPDU Guard
+## PortFast and BPDU Guard
 
-BPDU Guard protects edge ports from unauthorized switches participating in the Spanning Tree topology.
+PortFast and BPDU Guard were enabled on edge ports.
 
-It is used together with PortFast on selected edge ports.
+PortFast provides faster connectivity for end devices, while BPDU Guard protects edge ports from unexpected STP BPDUs.
 
 ```cisco
 spanning-tree portfast
@@ -48,33 +50,30 @@ spanning-tree bpduguard enable
 
 ## DHCP Snooping
 
-DHCP Snooping protects the network against unauthorized DHCP servers and builds a trusted DHCP binding database.
+DHCP Snooping was enabled on client VLANs to prevent unauthorized DHCP servers from providing network configuration to clients.
 
 ```cisco
 ip dhcp snooping
+ip dhcp snooping vlan 10,20,30,40,50,60,90
 ```
 
-## Dynamic ARP Inspection
-
-DAI validates ARP traffic using information learned through DHCP Snooping to help prevent ARP spoofing.
+Uplinks toward the Distribution layer were configured as trusted interfaces.
 
 ```cisco
-ip arp inspection vlan <vlan-id>
+interface <uplink>
+ ip dhcp snooping trust
 ```
 
-## IP Source Guard
-
-IP Source Guard restricts IP traffic on access ports using DHCP Snooping binding information.
-
-```cisco
-ip verify source
-```
+The interface connected to the legitimate DHCP server was also configured as trusted.
 
 ## Verification
 
 ```cisco
+show interfaces status
 show port-security
+show port-security address
 show ip dhcp snooping
 show ip dhcp snooping binding
-show ip arp inspection
 ```
+
+DHCP Snooping bindings were verified on the Access switches, confirming that client IP and MAC information was learned correctly.
