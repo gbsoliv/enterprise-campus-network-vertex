@@ -1,5 +1,4 @@
-# Case 08 — Edge Connectivity
-
+# Case 08 — WAN
 ## Problem
 
 The campus network requires connectivity to an edge router for future external network access.
